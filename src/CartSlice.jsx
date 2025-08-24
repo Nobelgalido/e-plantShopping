@@ -1,9 +1,10 @@
+// src/store/CartSlice.jsx
 import { createSlice } from "@reduxjs/toolkit";
 
 export const CartSlice = createSlice({
   name: "cart",
   initialState: {
-    items: [], // Initialize items as an empty array
+    items: [], // [{ name, image, cost, quantity }]
   },
   reducers: {
     addItem: (state, action) => {
@@ -12,23 +13,21 @@ export const CartSlice = createSlice({
       if (existingItem) {
         existingItem.quantity++;
       } else {
-        state.items.push({ name, image, cost, quantity });
+        state.items.push({ name, image, cost, quantity: 1 });
       }
     },
     removeItem: (state, action) => {
       state.items = state.items.filter((item) => item.name !== action.payload);
     },
     updateQuantity: (state, action) => {
-      const { name, quantity } = action.payload; // Destructure the product name and new quantity from the action payload
-      // Find the item in the cart that matches the given name
+      const { name, quantity } = action.payload;
       const itemToUpdate = state.items.find((item) => item.name === name);
       if (itemToUpdate) {
-        itemToUpdate.quantity = quantity; // If the item is found, update its quantity to the new value
+        itemToUpdate.quantity = quantity;
       }
     },
   },
 });
 
 export const { addItem, removeItem, updateQuantity } = CartSlice.actions;
-
 export default CartSlice.reducer;
